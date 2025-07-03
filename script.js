@@ -37,6 +37,7 @@ function appendTodoInHtml(todo){
     const editBtn = document.createElement("button");
     editBtn.textContent = "Edit";
     editBtn.classList.add("editBtn");
+    editBtn.addEventListener("click", editTodo);
 
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
@@ -107,6 +108,20 @@ function toggleTodo(event){
     resetHtmlTodos(todos);
 }
 
+function editTodo(event){
+    const todoItem = event.target.parentElement.parentElement;
+    const todoId = todoItem.getAttribute("data-id");
+    let todos = loadTodos();
+    const response = prompt("What is the new todo value ?");
+    todos.todoList.forEach(todo => {
+        if(todo.id == todoId){
+            todo.text = response;
+        }
+    });
+    refreshTodos(todos);
+    resetHtmlTodos(todos);
+}
+
 function deleteTodo(event){
     console.log("deleting");
     const todoItem = event.target.parentElement.parentElement;
@@ -116,6 +131,20 @@ function deleteTodo(event){
     todos.todoList = todos.todoList.filter(todo => todo.id != todoId);
     refreshTodos(todos);
     resetHtmlTodos(todos);
+}
+
+function addNewTodo(){
+    const todoText = todoInput.value;
+    if(todoText == ''){
+        alert("Please write something for the todo");
+    }else{
+        todos = loadTodos();
+        console.log(todos);
+        const id = todos.todoList.length;
+        addTodoToLocalStorage({text: todoText, isCompleted: false, id});
+        appendTodoInHtml({text: todoText, isCompleted: false, id});
+        todoInput.value = '';
+    }
 }
 
 
@@ -136,19 +165,7 @@ document.addEventListener("DOMContentLoaded", () => {
         btn.addEventListener("click", executeFilterAction);
     }
 
-    SubmitButton.addEventListener("click", (event) => {
-        const todoText = todoInput.value;
-        if(todoText == ''){
-            alert("Please write something for the todo");
-        }else{
-            todos = loadTodos();
-            console.log(todos);
-            const id = todos.todoList.length;
-            addTodoToLocalStorage({text: todoText, isCompleted: false, id});
-            appendTodoInHtml({text: todoText, isCompleted: false, id});
-            todoInput.value = '';
-        }
-    });
+    SubmitButton.addEventListener("click", addNewTodo);
 
     todoInput.addEventListener("change", (event) => {
         //This call back method is fired everytime there is a change in a input tag
@@ -163,4 +180,10 @@ document.addEventListener("DOMContentLoaded", () => {
         appendTodoInHtml(todo);
     });
 
+    document.addEventListener("keypress", (event)=>{
+        // console.log(event)
+        if(event.code == 'Enter'){
+            addNewTodo();
+        }
+    })
 });

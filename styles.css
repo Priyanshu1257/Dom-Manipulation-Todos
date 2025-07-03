@@ -45,6 +45,10 @@ h1{
     border-radius: 5px;
     color: white;
     cursor: pointer;
+    transition: background-color 0.4s;
+}
+#addTodo:hover{
+    background-color: var(--btn-delete);
 }
 
 ul {
@@ -77,7 +81,12 @@ li:last-child {
 }
 .editBtn {
     background-color: var(--btn-edit);
+    transition: background-color 0.3s;
 }
+.editBtn:hover, .deleteBtn:hover, .completedBtn:hover{
+    background-color: var(--btn-active);
+}
+
 .deleteBtn {
     background-color: var(--btn-delete);
 }
