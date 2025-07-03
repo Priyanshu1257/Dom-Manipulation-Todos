@@ -99,3 +99,7 @@ li:last-child {
     align-items: center;
     justify-content: space-between;
 }
+
+.completed {
+    text-decoration: line-through;
+}
